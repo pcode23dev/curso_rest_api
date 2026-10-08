@@ -6,8 +6,8 @@ import {
   deletarUsuarioService,
 } from "../services/usuario.service.js";
 
-export async function buscarUsuariosController(req, res, next) {
-  try {
+export async function buscarUsuariosController(req, res) {
+
     const usuarios = await buscarUsuariosService();
     console.log(usuarios);
 
@@ -15,13 +15,11 @@ export async function buscarUsuariosController(req, res, next) {
       msg: "Usuários encontrados",
       dados: usuarios,
     });
-  } catch (error) {
-    next(error);
-  }
+
 }
 
-export async function buscarUsuarioController(req, res, next) {
-  try {
+export async function buscarUsuarioController(req, res) {
+  
     const id = Number(req.params.id);
     const usuario = await buscarUsuarioService(id);
 
@@ -29,13 +27,11 @@ export async function buscarUsuarioController(req, res, next) {
       msg: "Usuário encontrado",
       dados: usuario,
     });
-  } catch (error) {
-    next(error);
-  }
+
 }
 
 export async function criarUsuarioController(req, res) {
-  try {
+ 
     const { nome, idade } = req.body;
 
     const usuariocriado = await criarUsuarioService(nome, idade);
@@ -44,16 +40,11 @@ export async function criarUsuarioController(req, res) {
       msg: "Usuário criado com sucesso",
       dados: usuariocriado,
     });
-  } catch (error) {
-    res.status(error.statusCode || 500).json({
-      code: error.statusCode || 500,
-      msg: error.message,
-    });
-  }
+
 }
 
 export async function actualizarUsuarioController(req, res) {
-  try {
+  
     const id = Number(req.params.id);
     const dados = req.body;
     const usuarioActualizado = await actualizarUsuarioService(id, dados);
@@ -62,16 +53,10 @@ export async function actualizarUsuarioController(req, res) {
       msg: "Usuário actualizado com sucesso",
       dados: usuarioActualizado,
     });
-  } catch (error) {
-    res.status(error.statusCode || 500).json({
-      code: error.statusCode || 500,
-      msg: error.message,
-    });
-  }
 }
 
 export async function deletarUsuarioController(req, res) {
-  try {
+ 
     const id = Number(req.params.id);
     const usuarioDeletado = await deletarUsuarioService(id);
 
@@ -79,10 +64,5 @@ export async function deletarUsuarioController(req, res) {
       msg: "Usuário deletado com sucesso",
       dados: usuarioDeletado,
     });
-  } catch (error) {
-    res.status(error.statusCode || 500).json({
-      code: error.statusCode || 500,
-      msg: error.message,
-    });
-  }
+ 
 }
