@@ -42,16 +42,6 @@ export async function criarUsuarioController(req, res) {
 export async function actualizarUsuarioController(req, res) {
   const id = Number(req.params.id);
 
-  const resultado = usuarioSchema.safeParse(req.body);
-  if (resultado.success) {
-    console.log("z: ", resultado);
-  } else {
-    resultado.error.issues.forEach((erro) => {
-      console.log("Campo:", erro.path[0]);
-      console.log("Código:", erro.code);
-      console.log("Mensagem:", erro.message);
-    });
-  }
   const dados = req.body;
   const usuarioActualizado = await actualizarUsuarioService(id, dados);
 

@@ -39,12 +39,22 @@ const validarId = (id) => {
   if (id < 0) {
     throw new AppError("ID nao pode ser menor que zero", 400);
   }
-}
+};
 
 export function validarUsuario(dados) {
   const { nome, idade } = dados;
-  validarNome(nome);
-  validarIdade(idade);
+  if (nome !== undefined && idade !== undefined) {
+    validarNome(nome);
+    validarIdade(idade);
+  }
+
+  if (nome !== undefined && idade === undefined) {
+    validarNome(nome);
+  }
+
+  if (nome === undefined && idade !== undefined) {
+    validarIdade(idade);
+  }
 }
 
 export async function criarUsuarioService(nome, idade) {
@@ -90,5 +100,5 @@ export default {
   buscarUsuariosService,
   buscarUsuarioService,
   actualizarUsuarioService,
-  deletarUsuarioService
-}
+  deletarUsuarioService,
+};

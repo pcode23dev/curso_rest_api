@@ -29,17 +29,48 @@ export async function buscarUsuario(id) {
 }
 
 export async function actualizarUsuario(id, dados) {
- 
-    const { nome, idade } = dados;
+
+  const { nome, idade } = dados;
+
+  if (nome !== undefined && idade !== undefined) {
+
     const resultado = await pool.query(
-      "UPDATE usuarios SET nome = $1, idade = $2 WHERE id = $3 RETURNING *;",
-      [nome, idade, id],
+      `UPDATE usuarios
+       SET nome = $1, idade = $2
+       WHERE id = $3
+       RETURNING *`,
+      [nome, idade, id]
     );
 
     return resultado.rows[0];
+  }
 
+  if (nome !== undefined && idade === undefined) {
+
+    const resultado = await pool.query(
+      `UPDATE usuarios
+       SET nome = $1
+       WHERE id = $2
+       RETURNING *`,
+      [nome, id]
+    );
+
+    return resultado.rows[0];
+  }
+
+  if (nome === undefined && idade !== undefined) {
+
+    const resultado = await pool.query(
+      `UPDATE usuarios
+       SET idade = $1
+       WHERE id = $2
+       RETURNING *`,
+      [idade, id]
+    );
+
+    return resultado.rows[0];
+  }
 }
-
 export async function deletarUsuario(id) {
  
     const resultado = await pool.query(
