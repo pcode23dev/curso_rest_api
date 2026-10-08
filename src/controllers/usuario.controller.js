@@ -1,3 +1,5 @@
+import usuarioSchema from "../schemas/usuario.schema.js";
+import usuariosSchema from "../schemas/usuario.schema.js";
 import {
   criarUsuarioService,
   buscarUsuariosService,
@@ -7,62 +9,64 @@ import {
 } from "../services/usuario.service.js";
 
 export async function buscarUsuariosController(req, res) {
+  const usuarios = await buscarUsuariosService();
+  console.log(usuarios);
 
-    const usuarios = await buscarUsuariosService();
-    console.log(usuarios);
-
-    res.status(200).json({
-      msg: "Usuários encontrados",
-      dados: usuarios,
-    });
-
+  res.status(200).json({
+    msg: "Usuários encontrados",
+    dados: usuarios,
+  });
 }
 
 export async function buscarUsuarioController(req, res) {
-  
-    const id = Number(req.params.id);
-    const usuario = await buscarUsuarioService(id);
+  const id = Number(req.params.id);
+  const usuario = await buscarUsuarioService(id);
 
-    res.status(200).json({
-      msg: "Usuário encontrado",
-      dados: usuario,
-    });
-
+  res.status(200).json({
+    msg: "Usuário encontrado",
+    dados: usuario,
+  });
 }
 
 export async function criarUsuarioController(req, res) {
- 
-    const { nome, idade } = req.body;
+  const { nome, idade } = req.body;
 
-    const usuariocriado = await criarUsuarioService(nome, idade);
+  const usuariocriado = await criarUsuarioService(nome, idade);
 
-    res.status(201).json({
-      msg: "Usuário criado com sucesso",
-      dados: usuariocriado,
-    });
-
+  res.status(201).json({
+    msg: "Usuário criado com sucesso",
+    dados: usuariocriado,
+  });
 }
 
 export async function actualizarUsuarioController(req, res) {
-  
-    const id = Number(req.params.id);
-    const dados = req.body;
-    const usuarioActualizado = await actualizarUsuarioService(id, dados);
+  const id = Number(req.params.id);
 
-    res.status(200).json({
-      msg: "Usuário actualizado com sucesso",
-      dados: usuarioActualizado,
+  const resultado = usuarioSchema.safeParse(req.body);
+  if (resultado.success) {
+    console.log("z: ", resultado);
+  } else {
+    resultado.error.issues.forEach((erro) => {
+      console.log("Campo:", erro.path[0]);
+      console.log("Código:", erro.code);
+      console.log("Mensagem:", erro.message);
     });
+  }
+  const dados = req.body;
+  const usuarioActualizado = await actualizarUsuarioService(id, dados);
+
+  res.status(200).json({
+    msg: "Usuário actualizado com sucesso",
+    dados: usuarioActualizado,
+  });
 }
 
 export async function deletarUsuarioController(req, res) {
- 
-    const id = Number(req.params.id);
-    const usuarioDeletado = await deletarUsuarioService(id);
+  const id = Number(req.params.id);
+  const usuarioDeletado = await deletarUsuarioService(id);
 
-    res.status(200).json({
-      msg: "Usuário deletado com sucesso",
-      dados: usuarioDeletado,
-    });
- 
+  res.status(200).json({
+    msg: "Usuário deletado com sucesso",
+    dados: usuarioDeletado,
+  });
 }
