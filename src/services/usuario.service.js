@@ -32,10 +32,14 @@ const validarIdade = (idade) => {
 };
 
 const validarId = (id) => {
-  if (typeof id !== "number" || id <= 0) {
-    throw new AppError("ID inválido. Deve ser um número positivo.", 400);
+  if (typeof id !== "number" || !Number.isInteger(id)) {
+    throw new AppError("ID inválido", 400);
   }
-};
+
+  if (id < 0) {
+    throw new AppError("ID nao pode ser menor que zero", 400);
+  }
+}
 
 export function validarUsuario(dados) {
   const { nome, idade } = dados;

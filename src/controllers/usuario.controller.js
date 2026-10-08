@@ -6,24 +6,21 @@ import {
   deletarUsuarioService,
 } from "../services/usuario.service.js";
 
-export async function buscarUsuariosController(req, res) {
+export async function buscarUsuariosController(req, res, next) {
   try {
     const usuarios = await buscarUsuariosService();
     console.log(usuarios);
-    
+
     res.status(200).json({
       msg: "Usuários encontrados",
       dados: usuarios,
     });
   } catch (error) {
-    res.status(error.statusCode || 500).json({
-      code: error.statusCode || 500,
-      msg: error.message
-    });
+    next(error);
   }
 }
 
-export async function buscarUsuarioController(req, res) {
+export async function buscarUsuarioController(req, res, next) {
   try {
     const id = Number(req.params.id);
     const usuario = await buscarUsuarioService(id);
@@ -33,10 +30,7 @@ export async function buscarUsuarioController(req, res) {
       dados: usuario,
     });
   } catch (error) {
-    res.status(error.statusCode || 500).json({
-      code: error.statusCode || 500,
-      msg: error.message
-    });
+    next(error);
   }
 }
 
@@ -62,8 +56,8 @@ export async function actualizarUsuarioController(req, res) {
   try {
     const id = Number(req.params.id);
     const dados = req.body;
-    const usuarioActualizado = await actualizarUsuarioService(id,dados);
-    
+    const usuarioActualizado = await actualizarUsuarioService(id, dados);
+
     res.status(200).json({
       msg: "Usuário actualizado com sucesso",
       dados: usuarioActualizado,
@@ -71,7 +65,7 @@ export async function actualizarUsuarioController(req, res) {
   } catch (error) {
     res.status(error.statusCode || 500).json({
       code: error.statusCode || 500,
-      msg: error.message
+      msg: error.message,
     });
   }
 }
@@ -88,7 +82,7 @@ export async function deletarUsuarioController(req, res) {
   } catch (error) {
     res.status(error.statusCode || 500).json({
       code: error.statusCode || 500,
-      msg: error.message
+      msg: error.message,
     });
   }
 }
